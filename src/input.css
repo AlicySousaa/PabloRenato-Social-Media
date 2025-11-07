@@ -1,0 +1,162 @@
+*,
+:after,
+:before {
+    box-sizing: border-box
+}
+
+html {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4
+}
+
+body {
+    margin: 0;
+    line-height: inherit
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+
+    input[type="search"] {
+        appearance: textfield;
+        -webkit-appearance: textfield;
+    }
+
+    ::-webkit-search-decoration {
+        appearance: none;
+        -webkit-appearance: none;
+    }
+}
+
+:root {
+    --color-dark-green: #1e5631;
+    --color-main-green: #5cbc60;
+    --color-light-green: #c5ee9d;
+    --color-beige: #F5E6CA;
+    --color-cream: #fff9ec;
+    --color-gray: #4d4d4d;
+    --color-dark-bg: #111;
+
+    /* Cor principal para uso geral */
+    --color-neon-green: #5cbc60;
+}
+
+@layer components {
+    .background-glow-effect {
+        @apply fixed inset-0 pointer-events-none z-0;
+
+        background:
+            radial-gradient(circle at top left, rgba(30, 86, 49, 0.2) 0%, transparent 40%),
+            radial-gradient(circle at top right, rgba(92, 188, 96, 0.15) 0%, transparent 40%),
+            radial-gradient(circle at bottom left, rgba(92, 188, 96, 0.15) 0%, transparent 40%),
+            radial-gradient(circle at bottom right, rgba(30, 86, 49, 0.2) 0%, transparent 40%);
+    }
+
+    .hover-glow {
+        @apply transition-all duration-300;
+    }
+
+    .hover-glow:hover {
+        @apply bg-gray-800/80;
+
+        box-shadow: 0 0 20px rgba(92, 188, 96, 0.6);
+        border: 1px solid rgba(92, 188, 96, 0.3);
+    }
+
+    /* Glow branco suave na foto de perfil */
+    .shadow-white-glow {
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Animação da seta no botão da headline */
+    .arrow-button {
+        @apply relative overflow-hidden;
+    }
+
+    .arrow-button span {
+        @apply inline-block transition-transform duration-300 ease-out;
+    }
+
+    .arrow-button:hover span {
+        animation: arrowMove 0.6s ease-in-out infinite;
+    }
+
+    @keyframes arrowMove {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(8px);
+        }
+    }
+
+    /* Efeito de câmera de cinema no nome Pablo Renato */
+    .camera-effect {
+        @apply relative inline-block cursor-pointer;
+    }
+
+    .camera-effect::after {
+        content: "🎬";
+        @apply absolute opacity-0 transition-all duration-300;
+        right: -35px;
+        top: 50%;
+        transform: translateY(-50%) rotate(0deg);
+        font-size: 1.2em;
+    }
+
+    .camera-effect:hover::after {
+        opacity: 1;
+        animation: cameraAction 0.6s ease-in-out;
+    }
+
+    @keyframes cameraAction {
+        0% {
+            transform: translateY(-50%) rotate(0deg) translateX(0);
+        }
+
+        25% {
+            transform: translateY(-50%) rotate(-10deg) translateX(-3px);
+        }
+
+        50% {
+            transform: translateY(-50%) rotate(0deg) translateX(0);
+        }
+
+        75% {
+            transform: translateY(-50%) rotate(10deg) translateX(3px);
+        }
+
+        100% {
+            transform: translateY(-50%) rotate(0deg) translateX(0);
+        }
+    }
+}
