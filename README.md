@@ -2,7 +2,7 @@
 
 Portfolio profissional de Pablo Renato, especialista em social media e gestão de tráfego pago, apresentando resultados reais de clientes e cases de sucesso.
 
-## 🎯 Sobre o Projeto
+## Sobre o Projeto
 
 Site desenvolvido para demonstrar a expertise em marketing digital, com foco em:
 - Gestão de tráfego pago (Meta Ads, Google Ads, TikTok Ads)
@@ -10,28 +10,28 @@ Site desenvolvido para demonstrar a expertise em marketing digital, com foco em:
 - Resultados mensuráveis para clientes
 - Portfolio de vídeos e campanhas
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **HTML5** - Estrutura semântica
 - **Tailwind CSS** - Estilização moderna e responsiva
 - **JavaScript** - Interatividade e controle de vídeos
 - **CSS3** - Animações e efeitos customizados
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-- 🎥 **Player de Vídeo Customizado** - Botão de play moderno com auto-pause entre vídeos
-- 📊 **Seção de Resultados** - Showcase de cases de sucesso com logos de clientes
-- 📱 **Design Responsivo** - Adaptado para desktop e mobile
-- 🎨 **Interface Moderna** - Visual clean com Tailwind CSS
-- 🔥 **Animações Suaves** - Hover effects e transições
+- **Player de Vídeo Customizado** - Botão de play moderno com auto-pause entre vídeos
+- **Seção de Resultados** - Showcase de cases de sucesso com logos de clientes
+- **Design Responsivo** - Adaptado para desktop e mobile
+- **Interface Moderna** - Visual clean com Tailwind CSS
+- **Animações Suaves** - Hover effects e transições
 
-## 🎬 Cases em Destaque
+## Cases em Destaque
 
 - **Autoescola** - Gestão de tráfego e conteúdo
 - **Malba Alimentos** - Campanhas estratégicas
 - **Studio de Estética** - Branding e social media
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 Pablo R Production/
@@ -47,7 +47,7 @@ Pablo R Production/
 └── tailwind.config.js     # Configuração do Tailwind
 ```
 
-## 🛠️ Como Rodar o Projeto
+## Como Rodar o Projeto
 
 1. Clone o repositório:
 ```bash
@@ -71,23 +71,17 @@ npm run dev
 
 5. Abra o arquivo `index.html` no navegador
 
-## 📦 Build para Produção
+## Build para Produção
 
 Para gerar a versão otimizada do CSS:
 ```bash
 npm run build
 ```
 
-## 📧 Contato
-
-- **Instagram**: [@pablorenato.adm](https://instagram.com/pablorenato.adm)
-- **Email**: Disponível no site
-- **WhatsApp**: Link disponível no site
-
-## 📄 Licença
+## Licença
 
 Este projeto é de propriedade de Pablo Renato. Todos os direitos reservados.
 
 ---
 
-Desenvolvido com 💚 por Alice Alves
+Desenvolvido por Alice Alves
