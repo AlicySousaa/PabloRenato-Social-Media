@@ -90,4 +90,4 @@ Este projeto é de propriedade de Pablo Renato. Todos os direitos reservados.
 
 ---
 
-Desenvolvido com 💚 por Pablo Renato
+Desenvolvido com 💚 por Alice Alves
