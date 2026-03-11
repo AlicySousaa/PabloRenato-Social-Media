@@ -390,17 +390,19 @@
         }
         .parceiro-result {
             width: 100%;
-            aspect-ratio: 16/9;
+            aspect-ratio: 4/3;
             border-radius: 2px;
             overflow: hidden;
             background: #000;
+            border: 1px solid rgba(92,188,96,0.1);
         }
         .parceiro-result img {
             width: 100%; height: 100%;
             object-fit: contain;
             transition: transform 0.5s ease;
+            padding: 0.5rem;
         }
-        .parceiro-card:hover .parceiro-result img { transform: scale(1.02); }
+        .parceiro-card:hover .parceiro-result img { transform: scale(1.03); }
         .parceiro-info { flex: 1; }
         .parceiro-name {
             font-family: 'Syne', sans-serif;
@@ -697,17 +699,80 @@
             transform: translateY(0);
         }
 
+        /* ── TABLET (até 1024px) ── */
+        @media (max-width: 1024px) {
+            .sobre-inner { gap: 4rem; }
+            .contato-grid { gap: 4rem; }
+            .parceiros-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ── MOBILE & TABLET PEQUENO (até 768px) ── */
         @media (max-width: 768px) {
-            nav { padding: 1.5rem; }
+            body { cursor: auto; }
+            .cursor, .cursor-follower { display: none; }
+
+            /* Nav */
+            nav { padding: 1.2rem 1.5rem; }
             .nav-links { display: none; }
-            #abertura { padding: 7rem 1.5rem 4rem; }
-            .sobre-inner, .contato-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .parceiros-grid { grid-template-columns: 1fr; }
-            .parceiro-card { flex-direction: column; align-items: flex-start; padding: 2rem; }
-            #quem-sou-eu, #resultados, #processo, #portfolio, #contato { padding: 5rem 1.5rem; }
-            .portfolio-header, .resultados-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .videos-row { overflow-x: auto; padding-bottom: 1rem; justify-content: flex-start; }
-            footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+
+            /* Hero */
+            #abertura { padding: 6rem 1.5rem 3.5rem; }
+            .hero-title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+            .hero-sub { font-size: 0.95rem; }
+            .hero-scroll { display: none; }
+
+            /* Sobre */
+            #quem-sou-eu { padding: 4rem 1.5rem; }
+            .sobre-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+            .sobre-inner > div:last-child { order: -1; }
+            .profile-frame { max-width: 260px; margin: 0 auto; }
+
+            /* Resultados */
+            #resultados { padding: 4rem 1.5rem; }
+            .resultados-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .parceiros-grid { grid-template-columns: 1fr; gap: 1.5px; }
+            .parceiro-card { padding: 1.75rem; }
+            .parceiro-result { aspect-ratio: 3/2; }
+
+            /* Processo */
+            #processo { padding: 4rem 1.5rem; }
+            .step { grid-template-columns: 56px 1fr; gap: 1.25rem; }
+            .step-icon { display: none; }
+            .step:hover { padding-left: 0; padding-right: 0; margin: 0; }
+
+            /* Portfolio */
+            #portfolio { padding: 4rem 1.5rem; }
+            .portfolio-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .videos-row {
+                overflow-x: auto;
+                padding-bottom: 1.25rem;
+                justify-content: flex-start;
+                gap: 1rem;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+            }
+            .video-item {
+                width: 62vw;
+                max-width: 220px;
+                flex-shrink: 0;
+                scroll-snap-align: start;
+            }
+
+            /* Contato */
+            #contato { padding: 4rem 1.5rem; }
+            .contato-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .contato-title { font-size: clamp(1.8rem, 7vw, 2.8rem); }
+            .btn-whatsapp { width: 100%; justify-content: center; }
+
+            /* Footer */
+            footer { flex-direction: column; gap: 0.75rem; text-align: center; padding: 1.75rem 1.5rem; }
+        }
+
+        /* ── MOBILE PEQUENO (até 380px) ── */
+        @media (max-width: 380px) {
+            .hero-title { font-size: 2rem; }
+            .video-item { width: 75vw; }
+            .btn-primary { padding: 0.9rem 1.75rem; font-size: 0.78rem; }
         }
     </style>
 </head>
