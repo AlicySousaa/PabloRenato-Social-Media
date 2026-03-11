@@ -1,300 +1,992 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pablo Renato - Social Media</title>
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
-    <link href="./dist/output.css" rel="stylesheet">
-
+    <title>Pablo Renato — Social Media</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --green: #5cbc60;
+            --green-light: #c5ee9d;
+            --green-dark: #1e5631;
+            --beige: #f5e6ca;
+            --cream: #fff9ec;
+            --bg: #111;
+            --bg2: #0d0d0d;
+            --gray: #4d4d4d;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom cursor */
+        .cursor {
+            width: 8px; height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-follower {
+            width: 32px; height: 32px;
+            border: 1px solid rgba(92,188,96,0.4);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        a:hover ~ .cursor, button:hover ~ .cursor { transform: translate(-50%, -50%) scale(3); }
+
+        /* Grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: normal;
+        }
+        nav::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(17,17,17,0.95), transparent);
+            z-index: -1;
+        }
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: var(--green);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a {
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px; left: 0;
+            width: 0; height: 1px;
+            background: var(--green);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--green); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* HERO */
+        #abertura {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: center;
+            padding: 8rem 3rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg-glow {
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(92,188,96,0.08) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        .hero-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.2s;
+        }
+        .hero-label::before {
+            content: '';
+            width: 2rem; height: 1px;
+            background: var(--green);
+        }
+        .hero-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.8rem, 7vw, 6rem);
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            max-width: 820px;
+            opacity: 0;
+            animation: fadeUp 0.9s ease forwards 0.4s;
+        }
+        .hero-title em {
+            font-style: normal;
+            color: var(--green);
+        }
+        .hero-sub {
+            margin-top: 2.5rem;
+            max-width: 480px;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.5);
+            opacity: 0;
+            animation: fadeUp 0.9s ease forwards 0.6s;
+        }
+        .hero-cta {
+            margin-top: 3.5rem;
+            opacity: 0;
+            animation: fadeUp 0.9s ease forwards 0.8s;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: var(--green);
+            color: #111;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--green-light);
+            transform: translateX(-101%);
+            transition: transform 0.3s ease;
+        }
+        .btn-primary:hover::before { transform: translateX(0); }
+        .btn-primary span { position: relative; z-index: 1; }
+        .btn-primary .arrow {
+            position: relative; z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        .btn-primary:hover .arrow { transform: translateX(5px); }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem; right: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+            writing-mode: vertical-rl;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 1.2s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SECTION BASE */
+        section { position: relative; z-index: 2; }
+
+        .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-label::before {
+            content: '';
+            width: 1.5rem; height: 1px;
+            background: var(--green);
+        }
+
+        /* SOBRE */
+        #quem-sou-eu {
+            padding: 7rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .sobre-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+        .sobre-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+        .sobre-title em {
+            font-style: normal;
+            color: rgba(255,255,255,0.3);
+        }
+        .sobre-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.55);
+        }
+        .sobre-line {
+            width: 3rem; height: 2px;
+            background: var(--green);
+            margin-bottom: 2rem;
+        }
+        .profile-frame {
+            position: relative;
+        }
+        .profile-frame img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 2px;
+            display: block;
+            filter: grayscale(20%);
+            transition: filter 0.5s;
+        }
+        .profile-frame:hover img { filter: grayscale(0%); }
+        .profile-frame::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border: 1px solid rgba(92,188,96,0.2);
+            border-radius: 2px;
+            transition: inset 0.3s ease;
+        }
+        .profile-frame:hover::before { inset: -8px; border-color: rgba(92,188,96,0.5); }
+        .profile-tag {
+            position: absolute;
+            bottom: -1rem; left: -1rem;
+            background: var(--green);
+            color: #111;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.4rem 0.8rem;
+        }
+
+        /* RESULTADOS */
+        #resultados {
+            padding: 7rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .resultados-inner { max-width: 1100px; margin: 0 auto; }
+        .resultados-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+        }
+        .resultados-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            max-width: 500px;
+            line-height: 1.1;
+        }
+        .parceiros-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5px;
+            background: rgba(255,255,255,0.06);
+        }
+        .parceiro-card {
+            background: var(--bg);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: background 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .parceiro-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 2.5rem; right: 2.5rem;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--green), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .parceiro-card:hover { background: rgba(92,188,96,0.03); }
+        .parceiro-card:hover::after { opacity: 1; }
+        .parceiro-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .parceiro-logo {
+            width: 52px; height: 52px;
+            border-radius: 2px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #1a1a1a;
+        }
+        .parceiro-logo img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .parceiro-result {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 2px;
+            overflow: hidden;
+            background: #000;
+        }
+        .parceiro-result img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+        .parceiro-card:hover .parceiro-result img { transform: scale(1.02); }
+        .parceiro-info { flex: 1; }
+        .parceiro-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .parceiro-sub {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.05em;
+        }
+
+        /* PROCESSO */
+        #processo {
+            padding: 7rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .processo-inner { max-width: 1100px; margin: 0 auto; }
+        .processo-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 4rem;
+            line-height: 1.1;
+        }
+        .steps-list { display: flex; flex-direction: column; }
+        .step {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 2rem;
+            align-items: start;
+            padding: 2.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            transition: all 0.3s;
+            cursor: default;
+        }
+        .step:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .step:hover { background: rgba(92,188,96,0.02); padding-left: 1rem; padding-right: 1rem; margin: 0 -1rem; }
+        .step-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--green);
+            padding-top: 0.2rem;
+        }
+        .step-body {}
+        .step-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .step-text {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.7;
+            max-width: 480px;
+        }
+        .step-icon {
+            font-size: 1.5rem;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        .step:hover .step-icon { opacity: 0.8; }
+
+        /* PORTFOLIO */
+        #portfolio {
+            padding: 7rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .portfolio-inner { max-width: 1100px; margin: 0 auto; }
+        .portfolio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+        }
+        .portfolio-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .videos-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .video-item {
+            width: 220px;
+            flex-shrink: 0;
+            position: relative;
+            border-radius: 0;
+        }
         .video-wrapper {
             position: relative;
             cursor: pointer;
+            aspect-ratio: 9/16;
+            background: #000;
+            overflow: hidden;
         }
-
-        .play-button {
+        .video-wrapper video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .video-item:hover .video-wrapper video { transform: scale(1.03); }
+        .video-overlay {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+            transition: opacity 0.3s;
+        }
+        .play-btn {
+            position: absolute;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(92, 188, 96, 0.9);
+            width: 52px; height: 52px;
+            border: 1.5px solid rgba(255,255,255,0.6);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             z-index: 10;
+            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.2);
         }
-
-        .play-button::after {
+        .play-btn::after {
             content: '';
-            width: 0;
-            height: 0;
-            border-left: 20px solid white;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            margin-left: 4px;
+            width: 0; height: 0;
+            border-left: 16px solid rgba(255,255,255,0.9);
+            border-top: 9px solid transparent;
+            border-bottom: 9px solid transparent;
+            margin-left: 3px;
+        }
+        .play-btn:hover {
+            border-color: var(--green);
+            background: rgba(92,188,96,0.15);
+        }
+        .video-wrapper.playing .play-btn { opacity: 0; pointer-events: none; }
+        .video-label {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
         }
 
-        .play-button:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: rgba(92, 188, 96, 1);
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 2rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.6);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
         }
+        .btn-outline:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+        .portfolio-footer { margin-top: 3.5rem; text-align: center; }
 
-        .video-wrapper.playing .play-button {
-            opacity: 0;
+        /* CONTATO */
+        #contato {
+            padding: 8rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        #contato::before {
+            content: '';
+            position: absolute;
+            top: -200px; right: -200px;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(92,188,96,0.06) 0%, transparent 70%);
             pointer-events: none;
+        }
+        .contato-inner { max-width: 1100px; margin: 0 auto; }
+        .contato-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+        .contato-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+        .contato-title em {
+            font-style: normal;
+            color: var(--green);
+        }
+        .contato-sub {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.7;
+            margin-bottom: 3rem;
+        }
+        .contato-right { display: flex; flex-direction: column; gap: 1.5rem; }
+        .contato-detail {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .contato-detail-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 0.4rem;
+        }
+        .contato-detail-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.8rem;
+            background: transparent;
+            border: 1px solid var(--green);
+            color: var(--green);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.3s;
+        }
+        .btn-whatsapp::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--green);
+            transform: translateY(101%);
+            transition: transform 0.35s ease;
+        }
+        .btn-whatsapp:hover { color: #111; }
+        .btn-whatsapp:hover::before { transform: translateY(0); }
+        .btn-whatsapp span { position: relative; z-index: 1; }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--green);
+            text-transform: uppercase;
+        }
+        .footer-copy {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 0.05em;
+        }
+
+        /* INTERSECTION OBSERVER ANIMATIONS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem; }
+            .nav-links { display: none; }
+            #abertura { padding: 7rem 1.5rem 4rem; }
+            .sobre-inner, .contato-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .parceiros-grid { grid-template-columns: 1fr; }
+            .parceiro-card { flex-direction: column; align-items: flex-start; padding: 2rem; }
+            #quem-sou-eu, #resultados, #processo, #portfolio, #contato { padding: 5rem 1.5rem; }
+            .portfolio-header, .resultados-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .videos-row { overflow-x: auto; padding-bottom: 1rem; justify-content: flex-start; }
+            footer { flex-direction: column; gap: 0.75rem; text-align: center; }
         }
     </style>
 </head>
+<body>
 
-<body class="bg-dark-bg text-white font-sans min-h-screen relative">
-    <!-- Efeito de brilho nas bordas -->
-    <div class="background-glow-effect"></div>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
 
-    <header class="sticky top-0 z-50 bg-dark-bg/90 backdrop-blur-sm shadow-lg border-b border-gray-800">
-        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
-            <h1 class="text-lg font-black text-neon-green camera-effect">PABLO RENATO</h1>
+    <!-- NAV -->
+    <nav>
+        <a href="#abertura" class="nav-logo">Pablo Renato</a>
+        <ul class="nav-links">
+            <li><a href="#abertura">Início</a></li>
+            <li><a href="#quem-sou-eu">Sobre</a></li>
+            <li><a href="#processo">Processo</a></li>
+            <li><a href="#portfolio">Portfólio</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+    </nav>
 
-            <nav class="hidden md:flex space-x-8">
-                <a href="#abertura"
-                    class="text-neon-green font-bold hover:text-white transition duration-300 hover:scale-110 transform">Início</a>
-                <a href="#quem-sou-eu"
-                    class="text-neon-green font-bold hover:text-white transition duration-300 hover:scale-110 transform">Sobre</a>
-                <a href="#processo"
-                    class="text-neon-green font-bold hover:text-white transition duration-300 hover:scale-110 transform">Processo</a>
-                <a href="#portfolio"
-                    class="text-neon-green font-bold hover:text-white transition duration-300 hover:scale-110 transform">Portfólio</a>
-                <a href="#contato"
-                    class="text-neon-green font-bold hover:text-white transition duration-300 hover:scale-110 transform">Contato</a>
-            </nav>
-
-        </div>
-    </header>
-
-    <section id="abertura" class="min-h-screen flex items-center justify-center text-center p-6 bg-dark-bg">
-        <div class="max-w-4xl space-y-8">
-            <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
-                A internet é a <span class="text-neon-green">rua mais movimentada</span> do mundo.
+    <!-- HERO -->
+    <section id="abertura">
+        <div class="hero-bg-glow"></div>
+        <div style="max-width:1100px; margin:0 auto; position:relative; z-index:2;">
+            <p class="hero-label">Social Media & Videomaker</p>
+            <h1 class="hero-title">
+                A internet é a <em>rua mais</em><br>movimentada do mundo.
             </h1>
-            <p class="text-lg sm:text-xl text-white-300 max-w-3xl mx-auto">
-                Mais de 100 milhões de brasileiros estão ativos nas redes sociais. Hoje, a internet se tornou um dos
-                maiores canais de comunicação direta com potenciais clientes e quem está fora do digital está deixando
-                muitas oportunidades na mesa.
+            <p class="hero-sub">
+                Mais de 100 milhões de brasileiros estão ativos nas redes. Quem está fora do digital está deixando oportunidades na mesa.
             </p>
-            <a href="#contato" class="inline-block px-10 py-4 mt-6 text-lg font-bold rounded-full 
-                                     bg-neon-green text-dark-bg shadow-lg hover:shadow-neon-green/50
-                                     transition duration-300 arrow-button">
-                <span>&rarr;</span>
-            </a>
-        </div>
-    </section>
-
-    <section id="quem-sou-eu" class="pt-8 pb-16 px-8 bg-dark-bg border-t justify-center border-gray-800 text-left">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-
-            <div class="space-y-6">
-                <div class="bg-gray-900 p-8 rounded-xl shadow-2xl border-2 border-main-green/30">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold border-l-4 border-main-green pl-4 mb-6">
-                        Por Trás das Lentes: <span class="text-white">Minha História</span>
-                    </h2>
-                    <p class="text-gray-300 text-lg mt-6 leading-relaxed"> Meu nome é Pablo Renato, tenho 23 anos e
-                        trabalho como social media há 2 anos. Ajudo empresas a se destacarem nas redes sociais por meio
-                        de estratégias de conteúdos que fortalecem o posicionamento, aumentam a visibilidade e aproximam
-                        marcas do seu público alvo. Meu foco é transformar perfis comuns em canais de comunicação,
-                        conexão e resultados.</p>
-                </div>
-            </div>
-
-            <div
-                class="w-4/5 mx-auto md:w-3/4 aspect-square bg-gray-800 rounded-full overflow-hidden border-2 border-light-green shadow-white-glow">
-                <img src="src/img/IMG_8135.jpg" alt="Foto de Perfil de Pablo Renato"
-                    class="w-full h-full object-cover block">
+            <div class="hero-cta">
+                <a href="#contato" class="btn-primary">
+                    <span>Falar agora</span>
+                    <svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="#111" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </a>
             </div>
         </div>
+        <div class="hero-scroll">Scroll</div>
     </section>
 
-    </div>
-    </section>
-
-    <section id="resultados" class="py-24 px-6 bg-dark-bg border-t border-gray-800">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-4xl sm:text-5xl font-extrabold mb-16">Parceiros que transformaram seus negócios</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Card 1: Autoescola -->
-                <div
-                    class="bg-gray-900 p-4 rounded-xl shadow-2xl border border-main-green/30 flex flex-col items-center">
-                    <div
-                        class="h-4 w-8 bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden mb-3 p-0.5">
-                        <img src="./src/img/logo autoescola.jpg" alt="Logo Autoescola"
-                            class="max-h-full max-w-full object-contain rounded-lg">
-                    </div>
-                    <div
-                        class="w-40 h-40 rounded-lg overflow-hidden border border-main-green/30 flex items-center justify-center bg-black">
-                        <img src="src/img/autoescola.png" alt="Resultado Autoescola"
-                            class="max-h-full max-w-full object-contain rounded-lg">
-                    </div>
-                </div>
-                <!-- Card 2: Malba -->
-                <div
-                    class="bg-gray-900 p-4 rounded-xl shadow-2xl border border-light-green/30 flex flex-col items-center">
-                    <div
-                        class="h-4 w-8 bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden mb-3 p-0.5">
-                        <img src="src/img/malba_logo.jpg" alt="Logo Malba"
-                            class="max-h-full max-w-full object-contain rounded-lg">
-                    </div>
-                    <div
-                        class="w-40 h-40 rounded-lg overflow-hidden border border-light-green/30 flex items-center justify-center bg-black">
-                        <img src="src/img/malba.png" alt="Resultado Malba"
-                            class="max-h-full max-w-full object-contain rounded-lg">
-                    </div>
+    <!-- SOBRE -->
+    <section id="quem-sou-eu">
+        <div class="sobre-inner">
+            <div class="reveal">
+                <p class="section-label">Quem sou eu</p>
+                <h2 class="sobre-title">Por trás<br>das <em>lentes</em></h2>
+                <div class="sobre-line"></div>
+                <p class="sobre-text">
+                    Meu nome é Pablo Renato, tenho 23 anos e trabalho como social media há 2 anos. Ajudo empresas a se destacarem nas redes sociais por meio de estratégias de conteúdos que fortalecem o posicionamento, aumentam a visibilidade e aproximam marcas do seu público alvo. Meu foco é transformar perfis comuns em canais de comunicação, conexão e resultados.
+                </p>
+            </div>
+            <div class="reveal" style="transition-delay:0.2s">
+                <div class="profile-frame">
+                    <img src="src/img/IMG_8135.jpg" alt="Pablo Renato">
+                    <div class="profile-tag">Social Media</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="processo" class="py-24 px-6 bg-dark-bg border-t border-gray-800">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-4xl sm:text-5xl font-extrabold mb-16 border-b-4 border-main-green/60 pb-2 inline-block">
-                Nosso Processo: Vídeos que geram resultados
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-gray-900 p-8 rounded-xl shadow-2xl text-left hover-glow border border-dark-green/30">
-                    <span class="text-5xl font-black text-main-green block mb-4">01</span>
-                    <h3 class="text-2xl font-bold mb-3 text-white">Estratégia e Roteiro</h3>
-                    <p class="text-gray-400">Análise, briefing do negócio e criação dos roteiros projetados para atingir
-                        os objetivos.
-                    </p>
+    <!-- RESULTADOS -->
+    <section id="resultados">
+        <div class="resultados-inner">
+            <div class="resultados-header reveal">
+                <div>
+                    <p class="section-label">Parceiros</p>
+                    <h2 class="resultados-title">Negócios que transformamos juntos</h2>
                 </div>
-                <div class="bg-gray-900 p-8 rounded-xl shadow-2xl text-left hover-glow border border-main-green/30">
-                    <span class="text-5xl font-black text-light-green block mb-4">02</span>
-                    <h3 class="text-2xl font-bold mb-3 text-white">Captação e Edição</h3>
-                    <p class="text-gray-400">Logo após a criação e aprovação dos conteúdos, marcamos a data para as
-                        gravações.</p>
+            </div>
+            <div class="parceiros-grid reveal" style="transition-delay:0.15s">
+                <div class="parceiro-card">
+                    <div class="parceiro-card-header">
+                        <div class="parceiro-logo">
+                            <img src="./src/img/logo autoescola.jpg" alt="Logo Autoescola">
+                        </div>
+                        <div class="parceiro-info">
+                            <div class="parceiro-name">Autoescola</div>
+                            <div class="parceiro-sub">Resultado de campanha</div>
+                        </div>
+                    </div>
+                    <div class="parceiro-result">
+                        <img src="src/img/autoescola.png" alt="Resultado Autoescola">
+                    </div>
                 </div>
-                <div class="bg-gray-900 p-8 rounded-xl shadow-2xl text-left hover-glow border border-light-green/30">
-                    <span class="text-5xl font-black text-dark-green block mb-4">03</span>
-                    <h3 class="text-2xl font-bold mb-3 text-white">Conteúdos prontos</h3>
-                    <p class="text-gray-400"> Agora vamos para as postagens e análises dos conteúdos para saber os que
-                        mais perfomaram.
-                    </p>
-                </div>
-                <div class="bg-gray-900 p-8 rounded-xl shadow-2xl text-left hover-glow border border-beige/20">
-                    <span class="text-5xl font-black text-beige block mb-4">04</span>
-                    <h3 class="text-2xl font-bold mb-3 text-white">Distribuição de conteúdos</h3>
-                    <p class="text-gray-400">Depois que analisarmos às métricas dos conteúdos, os melhores formados.
-                        Chegou a hora de impulsionar estrategicamente cada conteúdo postado.</p>
+                <div class="parceiro-card">
+                    <div class="parceiro-card-header">
+                        <div class="parceiro-logo">
+                            <img src="src/img/malba_logo.jpg" alt="Logo Malba">
+                        </div>
+                        <div class="parceiro-info">
+                            <div class="parceiro-name">Malba Alimentos</div>
+                            <div class="parceiro-sub">Resultado de campanha</div>
+                        </div>
+                    </div>
+                    <div class="parceiro-result">
+                        <img src="src/img/malba.png" alt="Resultado Malba">
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="portfolio" class="py-24 px-6 bg-dark-bg border-t border-gray-800">
-        <div class="max-w-7xl mx-auto text-center">
-            <h2 class="text-4xl sm:text-5xl font-extrabold mb-16">
-                Exemplos de <span class="text-white">produções e resultados</span>
-            </h2>
-
-            <div class="flex justify-center gap-4 flex-nowrap">
-                <!-- Vídeo 1: Malba Alimentos -->
-                <div
-                    class="group relative overflow-hidden rounded-xl shadow-2xl transition duration-300 hover:ring-4 hover:ring-main-green border border-main-green/20 w-[190px] flex-shrink-0">
-                    <div class="aspect-[9/16] bg-black video-wrapper">
-                        <video class="w-full h-full object-contain" src="src/videos/malbaalimentos.mp4"
-                            preload="metadata"></video>
-                        <div class="play-button"></div>
+    <!-- PROCESSO -->
+    <section id="processo">
+        <div class="processo-inner">
+            <div class="reveal">
+                <p class="section-label">Como funciona</p>
+                <h2 class="processo-title">Vídeos que<br>geram resultados</h2>
+            </div>
+            <div class="steps-list">
+                <div class="step reveal">
+                    <div class="step-num">01</div>
+                    <div class="step-body">
+                        <div class="step-title">Estratégia e Roteiro</div>
+                        <p class="step-text">Análise, briefing do negócio e criação dos roteiros projetados para atingir os objetivos.</p>
                     </div>
+                    <div class="step-icon">✦</div>
                 </div>
-                <!-- Vídeo 2: Autoescola -->
-                <div
-                    class="group relative overflow-hidden rounded-xl shadow-2xl transition duration-300 hover:ring-4 hover:ring-light-green border border-light-green/20 w-[190px] flex-shrink-0">
-                    <div class="aspect-[9/16] bg-black video-wrapper">
-                        <video class="w-full h-full object-contain" src="src/videos/autoescola.mp4"
-                            preload="metadata"></video>
-                        <div class="play-button"></div>
+                <div class="step reveal" style="transition-delay:0.1s">
+                    <div class="step-num">02</div>
+                    <div class="step-body">
+                        <div class="step-title">Captação e Edição</div>
+                        <p class="step-text">Logo após a criação e aprovação dos conteúdos, marcamos a data para as gravações.</p>
                     </div>
+                    <div class="step-icon">✦</div>
                 </div>
-                <!-- Vídeo 3: Studio Estética -->
-                <div
-                    class="group relative overflow-hidden rounded-xl shadow-2xl transition duration-300 hover:ring-4 hover:ring-light-green border border-light-green/20 w-[190px] flex-shrink-0">
-                    <div class="aspect-[9/16] bg-black video-wrapper">
-                        <video class="w-full h-full object-contain" src="src/videos/studio-estetica.mp4"
-                            preload="metadata"></video>
-                        <div class="play-button"></div>
+                <div class="step reveal" style="transition-delay:0.2s">
+                    <div class="step-num">03</div>
+                    <div class="step-body">
+                        <div class="step-title">Conteúdos Prontos</div>
+                        <p class="step-text">Vamos para as postagens e análises dos conteúdos para saber os que mais performaram.</p>
                     </div>
+                    <div class="step-icon">✦</div>
+                </div>
+                <div class="step reveal" style="transition-delay:0.3s">
+                    <div class="step-num">04</div>
+                    <div class="step-body">
+                        <div class="step-title">Distribuição Estratégica</div>
+                        <p class="step-text">Depois de analisar as métricas, impulsionamos estrategicamente cada conteúdo postado para maximizar alcance.</p>
+                    </div>
+                    <div class="step-icon">✦</div>
                 </div>
             </div>
-
-            <a href="#contato" class="inline-block px-8 py-3 mt-12 text-md font-bold rounded-full 
-                                     bg-cream text-dark-bg transition duration-300 border-2 border-beige
-                                     hover:bg-beige hover:scale-105 transform">
-                Ver Portfólio Completo
-            </a>
-
         </div>
     </section>
 
-    <section id="contato" class="py-16 px-6 bg-main-green text-dark-bg text-center">
-        <h2 class="text-4xl font-extrabold mb-4 text-white">Pronto para transformar sua comunicação?</h2>
-        <p class="text-xl mb-8 text-white">Vamos discutir seu próximo projeto de vídeo.</p>
-        <a href="https://wa.me/5586995749999" target="_blank"
-            class="inline-block px-10 py-4 text-xl font-bold rounded-full border-2 border-dark-bg 
-                             bg-dark-bg text-light-green transition duration-300 hover:bg-gray-custom hover:scale-105 transform">
-            Entrar em Contato Agora
-        </a>
+    <!-- PORTFOLIO -->
+    <section id="portfolio">
+        <div class="portfolio-inner">
+            <div class="portfolio-header reveal">
+                <div>
+                    <p class="section-label">Portfólio</p>
+                    <h2 class="portfolio-title">Produções<br>e resultados</h2>
+                </div>
+            </div>
+            <div class="videos-row reveal" style="transition-delay:0.15s">
+                <div class="video-item">
+                    <div class="video-wrapper">
+                        <video src="src/videos/malbaalimentos.mp4" preload="metadata"></video>
+                        <div class="video-overlay"></div>
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-label">Malba Alimentos</div>
+                </div>
+                <div class="video-item">
+                    <div class="video-wrapper">
+                        <video src="src/videos/autoescola.mp4" preload="metadata"></video>
+                        <div class="video-overlay"></div>
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-label">Autoescola</div>
+                </div>
+                <div class="video-item">
+                    <div class="video-wrapper">
+                        <video src="src/videos/studio-estetica.mp4" preload="metadata"></video>
+                        <div class="video-overlay"></div>
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-label">Studio Estética</div>
+                </div>
+            </div>
+            <div class="portfolio-footer reveal">
+                <a href="#contato" class="btn-outline">
+                    Ver portfólio completo
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
     </section>
 
-    <footer class="bg-gray-900 text-gray-500 py-6 text-center text-sm">
-        <p>&copy; 2025 Pablo Renato - Videomaker. Todos os direitos reservados.</p>
+    <!-- CONTATO -->
+    <section id="contato">
+        <div class="contato-inner">
+            <div class="contato-grid">
+                <div class="reveal">
+                    <p class="section-label">Contato</p>
+                    <h2 class="contato-title">Pronto para<br><em>transformar</em><br>sua comunicação?</h2>
+                    <p class="contato-sub">Vamos discutir seu próximo projeto de vídeo e construir sua presença digital.</p>
+                    <a href="https://wa.me/5586995749999" target="_blank" class="btn-whatsapp">
+                        <span>Entrar em contato agora</span>
+                    </a>
+                </div>
+                <div class="contato-right reveal" style="transition-delay:0.2s">
+                    <div class="contato-detail">
+                        <div class="contato-detail-label">WhatsApp</div>
+                        <div class="contato-detail-value">+55 (86) 99574-9999</div>
+                    </div>
+                    <div class="contato-detail">
+                        <div class="contato-detail-label">Serviço</div>
+                        <div class="contato-detail-value">Social Media & Videomaker</div>
+                    </div>
+                    <div class="contato-detail">
+                        <div class="contato-detail-label">Disponibilidade</div>
+                        <div class="contato-detail-value">Aceitando novos clientes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-brand">Pablo Renato</div>
+        <div class="footer-copy">© 2025 — Todos os direitos reservados.</div>
     </footer>
 
     <script>
-        // Controle de vídeos customizado
-        const videoWrappers = document.querySelectorAll('.video-wrapper');
+        // Cursor
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+        let mx = 0, my = 0, fx = 0, fy = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            cursor.style.left = mx + 'px';
+            cursor.style.top = my + 'px';
+        });
+        function animateFollower() {
+            fx += (mx - fx) * 0.12;
+            fy += (my - fy) * 0.12;
+            follower.style.left = fx + 'px';
+            follower.style.top = fy + 'px';
+            requestAnimationFrame(animateFollower);
+        }
+        animateFollower();
 
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.style.transform = 'translate(-50%,-50%) scale(2.5)');
+            el.addEventListener('mouseleave', () => cursor.style.transform = 'translate(-50%,-50%) scale(1)');
+        });
+
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        reveals.forEach(r => io.observe(r));
+
+        // Video controls
+        const videoWrappers = document.querySelectorAll('.video-wrapper');
         videoWrappers.forEach(wrapper => {
             const video = wrapper.querySelector('video');
-            const playButton = wrapper.querySelector('.play-button');
-
-            // Click no wrapper ou botão
-            wrapper.addEventListener('click', function () {
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
+            wrapper.addEventListener('click', () => {
+                if (video.paused) { video.play(); } else { video.pause(); }
             });
-
-            // Quando o vídeo inicia
-            video.addEventListener('play', function () {
+            video.addEventListener('play', () => {
                 wrapper.classList.add('playing');
-
-                // Pausar todos os outros vídeos
-                videoWrappers.forEach(otherWrapper => {
-                    const otherVideo = otherWrapper.querySelector('video');
-                    if (otherVideo !== video && !otherVideo.paused) {
-                        otherVideo.pause();
-                        otherWrapper.classList.remove('playing');
-                    }
+                videoWrappers.forEach(other => {
+                    const v = other.querySelector('video');
+                    if (v !== video && !v.paused) { v.pause(); other.classList.remove('playing'); }
                 });
             });
-
-            // Quando o vídeo pausa
-            video.addEventListener('pause', function () {
-                wrapper.classList.remove('playing');
-            });
-
-            // Quando o vídeo termina
-            video.addEventListener('ended', function () {
-                wrapper.classList.remove('playing');
-            });
+            video.addEventListener('pause', () => wrapper.classList.remove('playing'));
+            video.addEventListener('ended', () => wrapper.classList.remove('playing'));
         });
     </script>
 </body>
-
 </html>
